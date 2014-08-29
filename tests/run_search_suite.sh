@@ -1,0 +1,1 @@
+mchess -s searchsuite.epd

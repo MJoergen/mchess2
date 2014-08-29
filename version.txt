@@ -1,0 +1,55 @@
+
+version 1-02-00
+Features:
+  Added quiescence search.
+
+version 1-01-00
+Features:
+  Added simple time control.
+
+version 1-00-05
+Features:
+  Added perft testsuite.
+  Added search testsuite.
+
+version 1-00-04
+Features:
+  Optimized search speed by making memory accesses aligned.
+  Added: Hashing of current board position.
+  Added: Transposition tables.
+Bugfixes:
+  Did not update material upon pawn promotion.
+  No longer searches illegal positions due to check.
+  Changed implementation of CTime.h to make it portable to Windows.
+  Occasional parse error reading moves from GUI.
+
+version 1-00-03
+Features:
+  Added: Command perft
+Bugfixes:
+  Missing or incorrect moves involving pawn promotions.
+  Would corrupt castling rights during search.
+  Incorrect castling rights, when rook was captured.
+
+version 1-00-02
+Features:
+  Added: Iterative deepening with move re-ordering.
+  Added: Shows PV
+  Added: Can now read a FEN file from the command line.
+Bugfixes:
+  Would castle, despite being in check from enemy pawn.
+  Did not check for stalemate.
+
+version 1-00-01
+Features:
+  Added opening book.
+Bugfixes:
+  Castling now checks if in-between square is threatened.
+  Search info was not displayed properly in GUI.
+UCI fixes:
+  Now added version number to UCI name.
+  Now added node count and timing info.
+  
+version 1-00-00 : 2013-12-30
+First version that works with XBoard and polyglot
+

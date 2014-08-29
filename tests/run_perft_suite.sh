@@ -1,0 +1,1 @@
+mchess -p perftsuite.epd
