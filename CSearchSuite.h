@@ -11,7 +11,9 @@ class CSearchSuite
     public:
         friend std::ostream& operator <<(std::ostream &os, const CSearchSuite &rhs);
 
-        CSearchSuite(const char *fileName) : m_passCount(0), m_failCount(0), m_ai(m_board) {open(fileName);}
+        CSearchSuite(const char *fileName) : m_passCount(0), m_failCount(0),
+            m_testSuiteFile(), m_testSuiteLogFile(), m_board(), m_ai(m_board)
+            {open(fileName);}
         ~CSearchSuite() {close();}
 
         bool DoTest();

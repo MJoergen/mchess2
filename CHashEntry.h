@@ -27,7 +27,8 @@ class CHashEntry
         friend class AI;
         friend std::ostream& operator <<(std::ostream &os, const CHashEntry &rhs);
 
-        CHashEntry() {}
+        CHashEntry() : m_hashValue(), m_bestMove(), m_nodeTypeAndLevel(), m_searchValue()
+            {}
         void set(const CBoard& board);
         void update(const CBoard& board, const CMove& move);
         std::string ToString() const;

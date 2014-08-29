@@ -33,9 +33,10 @@ class CMove
         friend std::ostream& operator <<(std::ostream &os, const CMove &rhs);
 
         // Constructors
-        CMove() : m_piece(IV), m_captured(IV) {}
+        CMove() : m_from(), m_to(), m_piece(IV), m_captured(IV), m_promoted() {}
 
-        CMove(const char *str) : m_captured(IV) { FromString(str); }
+        CMove(const char *str) : m_from(), m_to(), m_piece(IV), m_captured(IV), m_promoted()
+            { FromString(str); }
 
         CMove(int8_t piece, const CSquare& from, const CSquare& to, int8_t captured = EM, int8_t promoted=EM) :
             m_from(from), m_to(to), m_piece(piece), m_captured(captured), m_promoted(promoted) {}

@@ -8,9 +8,8 @@ class CTime
     public:
         friend class CTimeDiff;
 
-        CTime()
+        CTime() : m_time(clock())
         {
-            m_time = clock();
         }
 
         CTime& operator += (int timeMs)
@@ -32,10 +31,9 @@ class CTime
 class CTimeDiff
 {
     public:
-        CTimeDiff(const CTime& start)
-        {
-            m_time = clock() - start.m_time;
-        }
+        CTimeDiff(const CTime& start) :
+            m_time(clock() - start.m_time)
+            {}
 
         unsigned int millisecs() const {return m_time / (CLOCKS_PER_SEC / 1000);}
 

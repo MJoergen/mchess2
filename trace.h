@@ -26,6 +26,7 @@ class CAppendFile
 {
     public:
         CAppendFile(const char *fileName)
+            : fd()
         {
             fd = open(fileName, O_CREAT | O_WRONLY | O_APPEND, 0644);
         }
@@ -50,15 +51,18 @@ class CAppendFile
  ***************************************************************/
 class CTraceBuf : public std::streambuf
 {
+    private:
+        CTraceBuf(const CTraceBuf&);
+        const CTraceBuf& operator =(const CTraceBuf&);
     protected:
         static const int bufferSize = 200;
         char buffer[bufferSize];
 
     public:
         CTraceBuf(const char *fileName) : fileName(fileName)
-    {
-        setp(buffer, buffer + (bufferSize-1));
-    }
+        {
+            setp(buffer, buffer + (bufferSize-1));
+        }
 
         virtual ~CTraceBuf()
         {
@@ -141,6 +145,9 @@ extern std::ostream *gpTrace;
  ***************************************************************/
 class CTraceFunction
 {
+    private:
+        CTraceFunction(const CTraceFunction&);
+        const CTraceFunction& operator =(const CTraceFunction&);
     public:
         CTraceFunction(const char *functionName) :
             functionName(functionName)

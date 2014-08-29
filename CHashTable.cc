@@ -6,6 +6,7 @@
  * constructor
  ***************************************************************/
 CHashTable::CHashTable()
+    : m_table()
 {
     m_table.reserve(TABLE_SIZE);
 }

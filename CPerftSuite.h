@@ -10,7 +10,8 @@ class CPerftSuite
     public:
         friend std::ostream& operator <<(std::ostream &os, const CPerftSuite &rhs);
 
-        CPerftSuite(const char *fileName) : m_passCount(0), m_failCount(0) {open(fileName);}
+        CPerftSuite(const char *fileName) : m_passCount(0), m_failCount(0),
+            m_testSuiteFile(), m_board()  {open(fileName);}
         ~CPerftSuite() {close();}
 
         bool DoTest();

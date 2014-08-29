@@ -9,7 +9,9 @@
 class AI
 {
 public:
-    AI(CBoard& board) : m_board(board) {m_moveList.clear();}
+    AI(CBoard& board) : m_board(board), m_nodes(), m_hashTable(), m_hashEntry(),
+        m_moveList(), m_timeEnd(), m_pvSearch()
+        {m_moveList.clear();}
 
     CMove find_best_move(int wTime = 0, int bTime = 0, int movesToGo = 0);
 

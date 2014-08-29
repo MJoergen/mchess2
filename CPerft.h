@@ -10,7 +10,8 @@ class CPerft
 
         friend std::ostream& operator <<(std::ostream &os, const CPerft &rhs);
 
-        CPerft(const CBoard &board) : m_board(board) {clear();}
+        CPerft(const CBoard &board) : m_board(board), m_nodes(), m_leafnodes(),
+            m_moveList(), m_hashEntry() {clear();}
 
         void clear();
         void search(int level);

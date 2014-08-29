@@ -100,10 +100,6 @@ int AI::search(int alpha, int beta, int level, CMoveList& pv)
         {
             switch (hashEntry.m_nodeTypeAndLevel.nodeType)
             {
-                case nodeExact :
-                    // Exact value. We are done!
-                    return hashEntry.m_searchValue;
-
                 case nodeLower :
                     // Lower bound. The true value may be more.
                     if (hashEntry.m_searchValue >= alpha)
@@ -115,6 +111,10 @@ int AI::search(int alpha, int beta, int level, CMoveList& pv)
                     if (hashEntry.m_searchValue <= beta)
                         beta = hashEntry.m_searchValue;
                     break;
+
+                default : // case nodeExact :
+                    // Exact value. We are done!
+                    return hashEntry.m_searchValue;
             }
 
             // Check if window is closed.

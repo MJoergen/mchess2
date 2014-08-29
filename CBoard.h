@@ -55,7 +55,9 @@ enum // Directions
 class CBoard
 {
     public:
-        CBoard() { newGame(); }
+        CBoard() : m_board(), m_state(), m_side_to_move(), m_castleRights(),
+            m_enPassantSquare(), m_material(), m_halfMoves(), m_fullMoves()
+            { newGame(); }
 
         // Copy constructor
         CBoard(const CBoard& rhs);

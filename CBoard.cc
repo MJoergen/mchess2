@@ -47,7 +47,7 @@ std::ostream& operator <<(std::ostream &os, const CBoard &rhs)
     switch (rhs.m_side_to_move)
     {
         case  1 : os << "White to move" << std::endl; break;
-        case -1 : os << "Black to move" << std::endl; break;
+        default : os << "Black to move" << std::endl; break;
     }
     if (rhs.m_castleRights & CASTLE_WHITE_SHORT)
         os << "K";
@@ -190,8 +190,14 @@ bool CBoard::read_from_fen(const char *fen, const char **endptr)
                                }
                                pos -= 18;
                                break;
-                    case '1'...'8':
-                               {
+                    case '1' :
+                    case '2' :
+                    case '3' :
+                    case '4' :
+                    case '5' :
+                    case '6' :
+                    case '7' :
+                    case '8' : {
                                    int count = fen[strpos] - '0';
                                    while (count > 0)
                                    {
@@ -244,10 +250,25 @@ bool CBoard::read_from_fen(const char *fen, const char **endptr)
             case st_enpassant :
                 switch (fen[strpos])
                 {
-                    case 'a'...'h' : m_enPassantSquare = (fen[strpos] - 'a') + 21; break;
-                    case '1'...'8' : m_enPassantSquare += (fen[strpos] - '1')*10; break;
+                    case 'a' :
+                    case 'b' :
+                    case 'c' :
+                    case 'd' :
+                    case 'e' :
+                    case 'f' :
+                    case 'g' :
+                    case 'h' : m_enPassantSquare = (fen[strpos] - 'a') + 21; break;
+                    case '1' :
+                    case '2' :
+                    case '3' :
+                    case '4' :
+                    case '5' :
+                    case '6' :
+                    case '7' :
+                    case '8' : m_enPassantSquare += (fen[strpos] - '1')*10; break;
                     case ' ' : state = st_halfmove; break;
                     case '-' : break;
+                    default  : return true;
                 }
                 break;
 
@@ -256,12 +277,20 @@ bool CBoard::read_from_fen(const char *fen, const char **endptr)
                     char *endp;
                     switch (fen[strpos])
                     {
-                        case '0'...'9' :
-                            m_halfMoves = strtol(&fen[strpos], &endp, 10); 
-                            strpos = endp-fen;
-                            break;
+                        case '0' :
+                        case '1' :
+                        case '2' :
+                        case '3' :
+                        case '4' :
+                        case '5' :
+                        case '6' :
+                        case '7' :
+                        case '8' :
+                        case '9' : m_halfMoves = strtol(&fen[strpos], &endp, 10); 
+                                   strpos = endp-fen;
+                                   break;
                         case ' ' : state = st_fullmove; break;
-                        default : state = st_finished; strpos--; break;
+                        default  : state = st_finished; strpos--; break;
                     }
 
                 }
@@ -272,17 +301,25 @@ bool CBoard::read_from_fen(const char *fen, const char **endptr)
                     char *endp;
                     switch (fen[strpos])
                     {
-                        case '0'...'9' :
-                            m_fullMoves = strtol(&fen[strpos], &endp, 10);
-                            strpos = endp-fen;
-                            break;
+                        case '0' :
+                        case '1' :
+                        case '2' :
+                        case '3' :
+                        case '4' :
+                        case '5' :
+                        case '6' :
+                        case '7' :
+                        case '8' :
+                        case '9' : m_fullMoves = strtol(&fen[strpos], &endp, 10);
+                                   strpos = endp-fen;
+                                   break;
                         case ' ' : state = st_finished; break;
-                        default : state = st_finished;
+                        default  : state = st_finished;
                     }
                 }
                 break;
 
-            case st_finished :
+            default : // case st_finished :
                 break;
         } // end of switch
         strpos++;
@@ -352,6 +389,7 @@ CMove CBoard::readMove(const char *p, const char **endptr) const
             case 'R' : piece = WR; ++p; break;
             case 'Q' : piece = WQ; ++p; break;
             case 'K' : piece = WK; ++p; break;
+            default  : return ret;
         }
         if (m_side_to_move < 0)
             piece = -piece;
@@ -1461,6 +1499,8 @@ uint32_t CBoard::calcHash() const
  * copy constructor
  ***************************************************************/
 CBoard::CBoard(const CBoard& rhs)
+    : m_board(), m_state(), m_side_to_move(), m_castleRights(),
+    m_enPassantSquare(), m_material(), m_halfMoves(), m_fullMoves()
 {
     m_side_to_move    = rhs.m_side_to_move;
     m_castleRights    = rhs.m_castleRights;

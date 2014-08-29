@@ -17,6 +17,7 @@ class CMoveList
 {
     public:
         CMoveList()
+            : m_moveList()
         {
             // Pre-allocate space for a large number of moves.
             // This is a slight optimization.

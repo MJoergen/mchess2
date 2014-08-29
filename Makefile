@@ -21,10 +21,12 @@ TARGET = linux
 objects = $(sources:.cc=.o)
 depends = $(sources:.cc=.d)
 
-OPTIONS  = -W -Wall
+OPTIONS  = -Wextra -Wall -Weffc++ -Wpedantic -Wno-long-long
+OPTIONS  += -Wswitch-default
 OPTIONS  += -O3
 OPTIONS  += -DNAME="$(relname)"
 
+OPTIONS  += -Og
 OPTIONS  += -g  # debug info
 OPTIONS  += -DENABLE_TRACE  
 #OPTIONS  += -pg # profiling   # Only needed for performance tuning.

@@ -507,7 +507,7 @@ std::string CHashEntry::ToString() const
     {
         case nodeUpper : ss << " upper"; break;
         case nodeLower : ss << " lower"; break;
-        case nodeExact : ss << " exact"; break;
+        default : /* case nodeExact : */ ss << " exact"; break;
     }
     ss << " (" << std::dec << (int) m_nodeTypeAndLevel.level;
     ss << ") -> " << m_searchValue;
