@@ -25,7 +25,8 @@ This takes approx two minutes on an average PC to complete.
 Search test suite
 =================
 
-This test suite contains over five hundred "interesting" positions.
+This test suite contains over five hundred "interesting" positions, taken from 
+http://chessprogramming.wikispaces.com/Test-Positions
 
 Use the command
 
@@ -38,6 +39,18 @@ each position has a time limit of one minute.
 
 After completion, the file searchsuite.epd.log contains the results of each
 test.
+
+On an average machine, I get the following results:
+- Bratko-Kopec Test        :   8 out of 24
+- CCR One Hour Test        :   5 out of 25
+- Kaufman Test             :   3 out of 25
+- Longuet Chess Test II    :   2 out of 35
+- Null Move Test-Positions :   3 out of 5
+- Silent but deadly        :  35 out of 134
+- Win at Chess             : 166 out of 300
+
+Total : 222 out of 548, i.e. 40.5 %
+
 
 
 Other tests
