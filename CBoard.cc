@@ -435,15 +435,15 @@ CMove CBoard::readMove(const char *p, const char **endptr) const
         for (int i=0; i<numMoves; ++i)
         {
             ret = moves[i];
-            if (ret.m_piece != piece)
+            if (ret.GetPiece() != piece)
                 continue;
-            if (ret.m_to != targetSq)
+            if (ret.To() != targetSq)
                 continue;
-            if (ret.m_promoted != promotion)
+            if (ret.GetPromoted() != promotion)
                 continue;
-            if (disambCol && disambCol != ret.m_from.col())
+            if (disambCol && disambCol != ret.From().col())
                 continue;
-            if (disambRow && disambRow != ret.m_from.row())
+            if (disambRow && disambRow != ret.From().row())
                 continue;
             break;
         }
@@ -1145,7 +1145,7 @@ void CBoard::make_move(const CMove &move)
 {
     m_state.push_back((m_enPassantSquare << 8) | m_castleRights);
     m_enPassantSquare = 0;
-    switch (move.m_captured)
+    switch (move.GetCaptured())
     {
         case WP : case BP : m_material += 1; break;
         case WN : case BN : m_material += 3; break;
@@ -1155,7 +1155,7 @@ void CBoard::make_move(const CMove &move)
         default : break;
     }
 
-    switch (move.m_promoted)
+    switch (move.GetPromoted())
     {
         case WN : case BN : m_material += 3-1; break;
         case WB : case BB : m_material += 3-1; break;
@@ -1165,34 +1165,34 @@ void CBoard::make_move(const CMove &move)
     }
 
     // If rook is captured, then update castling rights.
-    switch (move.m_captured)
+    switch (move.GetCaptured())
     {
         case WR :
-            if (move.m_to == H1)
+            if (move.To() == H1)
                 m_castleRights &= ~CASTLE_WHITE_SHORT;
-            if (move.m_to == A1)
+            if (move.To() == A1)
                 m_castleRights &= ~CASTLE_WHITE_LONG;
             break;
         case BR :
-            if (move.m_to == H8)
+            if (move.To() == H8)
                 m_castleRights &= ~CASTLE_BLACK_SHORT;
-            if (move.m_to == A8)
+            if (move.To() == A8)
                 m_castleRights &= ~CASTLE_BLACK_LONG;
             break;
         default : break;
     }
 
-    switch (m_board[move.m_from])
+    switch (m_board[move.From()])
     {
         case WK :
-            if (move.m_from == E1 &&
-                    move.m_to == G1) // White castling short
+            if (move.From() == E1 &&
+                    move.To() == G1) // White castling short
             {
                 m_board[H1] = EM;
                 m_board[F1] = WR;
             }
-            else if (move.m_from == E1 &&
-                    move.m_to == C1 ) // White castling long
+            else if (move.From() == E1 &&
+                    move.To() == C1 ) // White castling long
             {
                 m_board[A1] = EM;
                 m_board[D1] = WR;
@@ -1202,14 +1202,14 @@ void CBoard::make_move(const CMove &move)
             break;
 
         case BK :
-            if (move.m_from == E8 &&
-                    move.m_to == G8) // Black castling short
+            if (move.From() == E8 &&
+                    move.To() == G8) // Black castling short
             {
                 m_board[H8] = EM;
                 m_board[F8] = BR;
             }
-            else if (move.m_from == E8 &&
-                    move.m_to == C8) // Black castling long
+            else if (move.From() == E8 &&
+                    move.To() == C8) // Black castling long
             {
                 m_board[A8] = EM;
                 m_board[D8] = BR;
@@ -1219,49 +1219,49 @@ void CBoard::make_move(const CMove &move)
             break;
 
         case WR :
-            if (move.m_from == H1) // White moves king rook
+            if (move.From() == H1) // White moves king rook
             {
                 m_castleRights &= ~(CASTLE_WHITE_SHORT);
             }
-            else if (move.m_from == A1) // White moves queen rook
+            else if (move.From() == A1) // White moves queen rook
             {
                 m_castleRights &= ~(CASTLE_WHITE_LONG);
             }
             break;
 
         case BR :
-            if (move.m_from == H8) // Black moves king rook
+            if (move.From() == H8) // Black moves king rook
             {
                 m_castleRights &= ~(CASTLE_BLACK_SHORT);
             }
-            else if (move.m_from == A8) // Black moves queen rook
+            else if (move.From() == A8) // Black moves queen rook
             {
                 m_castleRights &= ~(CASTLE_BLACK_LONG);
             }
             break;
 
         case WP :
-            if (move.m_to - move.m_from == 20) // White double pawn move
+            if (move.To() - move.From() == 20) // White double pawn move
             {
-                m_enPassantSquare = move.m_from + 10;
+                m_enPassantSquare = move.From() + 10;
             }
-            else if (move.m_to - move.m_from != 10) // White pawn capture
+            else if (move.To() - move.From() != 10) // White pawn capture
             {
-                if (m_board[move.m_to] == EM) { // En-passant capture
-                    m_board[move.m_to - 10] = EM;
+                if (m_board[move.To()] == EM) { // En-passant capture
+                    m_board[move.To() - 10] = EM;
                 }
             }
             break;
 
         case BP :
-            if (move.m_from - move.m_to == 20) // Black double pawn move
+            if (move.From() - move.To() == 20) // Black double pawn move
             {
-                m_enPassantSquare = move.m_to + 10;
+                m_enPassantSquare = move.To() + 10;
             }
-            else if (move.m_from - move.m_to != 10) // Black pawn capture
+            else if (move.From() - move.To() != 10) // Black pawn capture
             {
-                if (m_board[move.m_to] == EM) { // En-passant capture
-                    m_board[move.m_to + 10] = EM;
+                if (m_board[move.To()] == EM) { // En-passant capture
+                    m_board[move.To() + 10] = EM;
                 }
             }
             break;
@@ -1270,10 +1270,10 @@ void CBoard::make_move(const CMove &move)
             break;
     } // end of switch
 
-    m_board[move.m_to] = m_board[move.m_from];
-    if (move.m_promoted != EM)
-        m_board[move.m_to] = move.m_promoted;
-    m_board[move.m_from] = EM;
+    m_board[move.To()] = m_board[move.From()];
+    if (move.GetPromoted() != EM)
+        m_board[move.To()] = move.GetPromoted();
+    m_board[move.From()] = EM;
     m_side_to_move = -m_side_to_move;
     m_material = -m_material;
 } // end of void CBoard::make_move(const CMove &move)
@@ -1286,7 +1286,7 @@ void CBoard::make_move(const CMove &move)
 void CBoard::undo_move(const CMove &move)
 {
     m_material = -m_material;
-    switch (move.m_captured)
+    switch (move.GetCaptured())
     {
         case WP : case BP : m_material -= 1; break;
         case WN : case BN : m_material -= 3; break;
@@ -1296,7 +1296,7 @@ void CBoard::undo_move(const CMove &move)
         default : break;
     }
 
-    switch (move.m_promoted)
+    switch (move.GetPromoted())
     {
         case WN : case BN : m_material -= 3-1; break;
         case WB : case BB : m_material -= 3-1; break;
@@ -1306,33 +1306,33 @@ void CBoard::undo_move(const CMove &move)
     }
 
     m_enPassantSquare = 0;
-    switch (m_board[move.m_to])
+    switch (m_board[move.To()])
     {
         case WP :
-            if ((move.m_to - move.m_from)%10 != 0 && move.m_captured == EM)
+            if ((move.To() - move.From())%10 != 0 && move.GetCaptured() == EM)
             {
-                m_enPassantSquare = move.m_to;
+                m_enPassantSquare = move.To();
                 m_board[m_enPassantSquare - 10] = BP;
             }
             break;
 
         case BP :
-            if ((move.m_from - move.m_to)%10 != 0 && move.m_captured == EM)
+            if ((move.From() - move.To())%10 != 0 && move.GetCaptured() == EM)
             {
-                m_enPassantSquare = move.m_to;
+                m_enPassantSquare = move.To();
                 m_board[m_enPassantSquare + 10] = WP;
             }
             break;
 
         case WK :
-            if (move.m_from == E1 &&
-                    move.m_to == G1) // White castling short
+            if (move.From() == E1 &&
+                    move.To() == G1) // White castling short
             {
                 m_board[F1] = EM;
                 m_board[H1] = WR;
             }
-            else if (move.m_from == E1 &&
-                    move.m_to == C1) // White castling long
+            else if (move.From() == E1 &&
+                    move.To() == C1) // White castling long
             {
                 m_board[D1] = EM;
                 m_board[A1] = WR;
@@ -1340,14 +1340,14 @@ void CBoard::undo_move(const CMove &move)
             break;
 
         case BK :
-            if (move.m_from == E8 &&
-                    move.m_to == G8) // Black castling short
+            if (move.From() == E8 &&
+                    move.To() == G8) // Black castling short
             {
                 m_board[F8] = EM;
                 m_board[H8] = BR;
             }
-            else if (move.m_from == E8 &&
-                    move.m_to == C8) // Black castling long
+            else if (move.From() == E8 &&
+                    move.To() == C8) // Black castling long
             {
                 m_board[D8] = EM;
                 m_board[A8] = BR;
@@ -1358,8 +1358,8 @@ void CBoard::undo_move(const CMove &move)
             break;
     } // end of switch
 
-    m_board[move.m_from] = move.m_piece;
-    m_board[move.m_to] = move.m_captured;
+    m_board[move.From()] = move.GetPiece();
+    m_board[move.To()] = move.GetCaptured();
     m_side_to_move = -m_side_to_move;
 
     if (!m_state.empty())
@@ -1388,8 +1388,8 @@ bool CBoard::IsMoveValid(CMove &move) const
     {
         if (moves[i] == move)
         {
-            move.m_piece = m_board[move.m_from];
-            move.m_captured = m_board[move.m_to];
+            move.SetPiece(m_board[move.From()]);
+            move.SetCaptured(m_board[move.To()]);
             return true;
         }
     }

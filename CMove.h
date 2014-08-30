@@ -27,10 +27,6 @@ typedef enum {
 class CMove
 {
     public:
-        friend class CBoard;
-        friend class CHashEntry;
-
-        friend std::ostream& operator <<(std::ostream &os, const CMove &rhs);
 
         // Constructors
         CMove() : m_from(), m_to(), m_piece(IV), m_captured(IV), m_promoted() {}
@@ -41,7 +37,12 @@ class CMove
         CMove(int8_t piece, const CSquare& from, const CSquare& to, int8_t captured = EM, int8_t promoted=EM) :
             m_from(from), m_to(to), m_piece(piece), m_captured(captured), m_promoted(promoted) {}
 
+
+        // Modifiers
         const char * FromString(const char *s); // Returns NULL if error
+
+        void SetCaptured(int8_t captured) { m_captured = captured; }
+        void SetPiece(int8_t piece) { m_piece = piece; }
 
 
         // Accessor functions
@@ -50,9 +51,14 @@ class CMove
 
         CSquare     From(void) const {return m_from;}
         CSquare     To(void) const {return m_to;}
-        bool        Valid(void) const { return m_captured != IV; }
-        bool        is_captured_piece_a_king(void) const { return (m_captured == WK || m_captured == BK); }
-        bool        is_it_a_capture(void) const { return (m_captured != EM); }
+        int8_t      GetPiece(void) const { return m_piece; }
+        int8_t      GetCaptured(void) const { return m_captured; }
+        int8_t      GetPromoted(void) const { return m_promoted; }
+
+        // Utility functions
+        bool        Valid(void) const { return GetCaptured() != IV; }
+        bool        is_captured_piece_a_king(void) const { return (GetCaptured() == WK || GetCaptured() == BK); }
+        bool        is_it_a_capture(void) const { return (GetCaptured() != EM); }
         bool        operator==(const CMove& rhs) const
         {
             if (rhs.From() != From())
@@ -69,6 +75,8 @@ class CMove
         int8_t      m_captured;
         int8_t      m_promoted;
 }; /* end of CMove */
+
+std::ostream& operator <<(std::ostream &os, const CMove &rhs);
 
 #endif // _C_MOVE_H_
 

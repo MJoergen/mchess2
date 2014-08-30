@@ -273,16 +273,16 @@ void CHashEntry::set(const CBoard& board)
  ***************************************************************/
 void CHashEntry::update(const CBoard& board, const CMove& move)
 {
-    CSquare sq_from = move.m_from;
-    CSquare sq_to   = move.m_to;
+    CSquare sq_from = move.From();
+    CSquare sq_to   = move.To();
 
     int sqix_from = ((sq_from/10)-2)*8 + (sq_from%10)-1;
     int sqix_to   = ((sq_to/10)-2)*8 + (sq_to%10)-1;
 
     int8_t piece_moved    = board.m_board[sq_from];
     int8_t piece_to       = board.m_board[sq_to];
-    int8_t piece_captured = move.m_captured;
-    int8_t piece_promoted = move.m_promoted;
+    int8_t piece_captured = move.GetCaptured();
+    int8_t piece_promoted = move.GetPromoted();
 
     int pix_moved;
     if (piece_moved > 0)
