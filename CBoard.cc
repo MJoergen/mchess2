@@ -389,7 +389,7 @@ CMove CBoard::readMove(const char *p, const char **endptr) const
             case 'R' : piece = WR; ++p; break;
             case 'Q' : piece = WQ; ++p; break;
             case 'K' : piece = WK; ++p; break;
-            default  : return ret;
+            default  : break;
         }
         if (m_side_to_move < 0)
             piece = -piece;
@@ -425,7 +425,7 @@ CMove CBoard::readMove(const char *p, const char **endptr) const
                 case 'B' : promotion = WB; ++p; break;
                 case 'R' : promotion = WR; ++p; break;
                 case 'Q' : promotion = WQ; ++p; break;
-                default : return ret;
+                default  : return ret;
             }
         }
         if (m_side_to_move < 0)
