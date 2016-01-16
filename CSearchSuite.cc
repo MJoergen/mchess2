@@ -113,7 +113,10 @@ bool CSearchSuite::DoTest()
                     ++p;
                     CMove move = m_board.readMove(p, &p);
                     if (!move.Valid())
+                    {
+                        std::cout << "Invalid move" << std::endl;
                         exit(-1);
+                    }
                     expBestMoves.push_back(move);
                 }
 
@@ -125,7 +128,10 @@ bool CSearchSuite::DoTest()
                     ++p;
                     CMove move = m_board.readMove(p, &p);
                     if (!move.Valid())
+                    {
+                        std::cout << "Invalid move" << std::endl;
                         exit(-1);
+                    }
                     avoidMoves.push_back(move);
                 }
             }
