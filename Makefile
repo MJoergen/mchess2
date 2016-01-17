@@ -15,8 +15,8 @@ version = 1-02-00 # UCI-version - Engine-version - Bugfixes
 
 relname = $(program)-$(version)
 
-TARGET = linux
-#TARGET = windows
+#TARGET = linux
+TARGET = windows
 
 objects = $(sources:.cc=.o)
 depends = $(sources:.cc=.d)
@@ -26,8 +26,8 @@ OPTIONS  += -Wswitch-default
 OPTIONS  += -O3
 OPTIONS  += -DNAME="$(relname)"
 
-OPTIONS  += -Og
-OPTIONS  += -g  # debug info
+#OPTIONS  += -Og
+#OPTIONS  += -g  # debug info
 OPTIONS  += -DENABLE_TRACE  
 #OPTIONS  += -pg # profiling   # Only needed for performance tuning.
 #OPTIONS  += -DDEBUG_HASH      # Only needed for debugging.
