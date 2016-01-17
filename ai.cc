@@ -74,6 +74,8 @@ int AI::search(int alpha, int beta, int level, CMoveList& pv)
 
             m_hashTable.insert(hashEntry);
             TRACE("Added quiet hashEntry : " << m_moveList << " " << hashEntry << std::endl);
+
+            m_killerMove = pv[0];
         }
 
         return val;
@@ -141,11 +143,28 @@ int AI::search(int alpha, int beta, int level, CMoveList& pv)
         {
             if (moves[i] == hashEntry.m_bestMove)
             {
-                TRACE("Move reordering! Play " << hashEntry.m_bestMove
+                TRACE("Hash: Move reordering! Play " << hashEntry.m_bestMove
                         << " first" << std::endl);
                 moves[i] = moves[0];
                 moves[0] = hashEntry.m_bestMove;
                 break;
+            }
+        }
+    }
+    else
+    { // Search captures first.
+        unsigned int j=0;
+        for (unsigned int i=0; i<moves.size(); ++i)
+        {
+            if (moves[i].is_it_a_capture())
+            {
+                CMove tmpMove = moves[i];
+                moves[i] = moves[j];
+                moves[j] = tmpMove;
+
+                TRACE("Capture: Move reordering! Play " << tmpMove
+                        << " first" << std::endl);
+                j++;
             }
         }
     }
@@ -298,12 +317,30 @@ int AI::quiescence(int alpha, int beta, CMoveList& pv)
     CMoveList moves;
     m_board.find_legal_moves(moves);
 
+    // Search killer move first
+    unsigned int j=0;
+    if (m_killerMove.Valid())
+    {
+        for (unsigned int i=0; i<moves.size(); ++i)
+        {
+            if (moves[i] == m_killerMove && moves[i].is_it_a_capture())
+            {
+                CMove tmpMove = moves[i];
+                moves[i] = moves[j];
+                moves[j] = tmpMove;
+
+                TRACE("Killer move reordering! Play " << tmpMove
+                        << " first" << std::endl);
+                j++;
+            }
+        }
+    } // end of if lastMove.Valid()
+
     // Search recaptures to same square first.
     CMove lastMove = m_moveList.last();
     if (lastMove.Valid())
     {
-        unsigned int j=0;
-        for (unsigned int i=0; i<moves.size(); ++i)
+        for (unsigned int i=j; i<moves.size(); ++i)
         {
             if (moves[i].To() == lastMove.To())
             {
@@ -311,7 +348,7 @@ int AI::quiescence(int alpha, int beta, CMoveList& pv)
                 moves[i] = moves[j];
                 moves[j] = tmpMove;
 
-                TRACE("  Move reordering! Play " << tmpMove
+                TRACE("Recapture move reordering! Play " << tmpMove
                         << " first" << std::endl);
                 j++;
             }
