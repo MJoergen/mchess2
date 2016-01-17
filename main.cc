@@ -88,6 +88,8 @@ int main(int argc, char **argv)
         }
     }
 
+    TRACE("Starting trace" << std::endl);
+
     while (true) // Repeat forever
     {
         if (!uciMode)
@@ -97,6 +99,7 @@ int main(int argc, char **argv)
         }
         std::string str;
         getline(std::cin, str);
+        TRACE(str << std::endl);
         if (!uciMode)
         {
             std::cout << std::endl;
@@ -231,6 +234,8 @@ int main(int argc, char **argv)
                         ++p;
                     movesToGo = strtol(p, (char **)&p, 10);
                 }
+                else /* Skip rest of line */
+                    break;
 
                 while (*p == ' ')
                     ++p;
