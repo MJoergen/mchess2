@@ -10,7 +10,7 @@ class AI
 {
 public:
     AI(CBoard& board) : m_board(board), m_nodes(), m_hashTable(), m_hashEntry(),
-        m_moveList(), m_timeEnd(), m_pvSearch()
+        m_moveList(), m_timeEnd(), m_pvSearch(), m_killerMove()
         {m_moveList.clear();}
 
     CMove find_best_move(int wTime = 0, int bTime = 0, int movesToGo = 0);
@@ -26,6 +26,7 @@ private:
     CMoveList       m_moveList;
     CTime           m_timeEnd;
     bool            m_pvSearch;
+    CMove           m_killerMove;
 }; // end of class AI
 
 #endif // _AI_H_
