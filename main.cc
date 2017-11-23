@@ -207,8 +207,8 @@ int main(int argc, char **argv)
             while (*p == ' ')
                 ++p;
 
-            int wtime_ms = 10000;
-            int btime_ms = 10000;
+            int wtime_ms = 300000;
+            int btime_ms = 300000;
             int movesToGo = 40;
 
             while (*p)

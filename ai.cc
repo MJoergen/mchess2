@@ -355,6 +355,22 @@ int AI::quiescence(int alpha, int beta, CMoveList& pv)
         }
     } // end of if lastMove.Valid()
 
+    // Search piece captures first.
+    for (unsigned int i=j; i<moves.size(); ++i)
+    {
+        if (moves[i].GetCaptured() != WP && 
+                moves[i].GetCaptured() != BP && 
+                moves[i].GetCaptured() != EM)
+        {
+            CMove tmpMove = moves[i];
+            moves[i] = moves[j];
+            moves[j] = tmpMove;
+
+            TRACE("Piece capture move reordering! Play " << tmpMove
+                    << " first" << std::endl);
+            j++;
+        }
+    }
 
     for (unsigned int i=0; i<moves.size(); ++i)
     {
@@ -437,7 +453,7 @@ CMove AI::find_best_move(int wTime, int bTime, int movesToGo)
     int num_good;
 
     int level = 0;
-    while (level <= 14)
+    while (level <= 2)
     {
         TRACE("level: " << level << std::endl);
         TRACE("moves: ");
@@ -479,6 +495,7 @@ CMove AI::find_best_move(int wTime, int bTime, int movesToGo)
             {
                 num_good = 0;
             }
+
             if (val >= best_val)
             {
                 num_good++;
@@ -546,6 +563,11 @@ CMove AI::find_best_move(int wTime, int bTime, int movesToGo)
         level += 2;
     }
 
-    return best_moves[rand()%num_good];
+    CMove move = best_moves[rand()%num_good];
+
+    TRACE(num_good << " moves to choose from" << std::endl);
+    TRACE("Playing " << move << std::endl);
+
+    return move;
 } // end of CMove find_best_move(CBoard &board)
 
